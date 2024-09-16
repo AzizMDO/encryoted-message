@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve This for Your Surprise :p</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { max-width: 600px; margin: 20px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .message { margin-top: 20px; font-size: 18px; }
+        .hint { margin-top: 20px; color: #555; font-weight: bold; }
+        .result { margin-top: 20px; font-size: 20px; color: green; }
+        .error { margin-top: 20px; font-size: 20px; color: red; }
+        input { margin-top: 10px; padding: 10px; font-size: 16px; }
+        button { padding: 10px 20px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Solve This for Your Surprise :p</h1>
+        <p>Try to decrypt the following message. Enter the correct keyword to reveal the surprise:</p>
+        <p class="message" id="message"></p>
+        <p class="hint">Hint: What is the most thing you love?</p>
+        <input type="text" id="keywordInput" placeholder="Enter keyword">
+        <button onclick="checkSolution()">Submit</button>
+        
+        <div class="result" id="result"></div>
+        <div class="error" id="error"></div>
+    </div>
+
+    <script>
+        // Substitution Cipher Encryption
+        function encryptMessage(message, keyword) {
+            let alphabet = 'abcdefghijklmnopqrstuvwxyz';
+            let uniqueKeyword = [...new Set(keyword.toLowerCase().split(''))].join('');
+            let substitution = uniqueKeyword + alphabet.split('').filter(char => !uniqueKeyword.includes(char)).join('');
+            let encrypted = '';
+            for (let char of message) {
+                let index = alphabet.indexOf(char.toLowerCase());
+                if (index !== -1) {
+                    let encryptedChar = substitution[index];
+                    encrypted += char === char.toUpperCase() ? encryptedChar.toUpperCase() : encryptedChar;
+                } else {
+                    encrypted += char;
+                }
+            }
+            return encrypted;
+        }
+
+        // Keyword and Message
+        const originalMessage = "no paths are bound";
+        const keyword = "CARAMEL"; // Keyword for Substitution Cipher
+
+        // Encrypting the message
+        const encryptedMessage = encryptMessage(originalMessage, keyword);
+
+        // Displaying the encrypted message
+        document.getElementById('message').textContent = `Encrypted Message: ${encryptedMessage}`;
+
+        // Check the user's solution
+        function checkSolution() {
+            const userKeyword = document.getElementById('keywordInput').value;
+            if (userKeyword.toUpperCase() === keyword) {
+                document.getElementById('result').textContent = "Congratulations! You solved it. Here's your surprise: 🌟 No fates are bound 🌟 May you have a blessed day Anastasia <3 🌟";
+                document.getElementById('error').textContent = '';
+            } else {
+                document.getElementById('result').textContent = '';
+                document.getElementById('error').textContent = "Incorrect keyword. Try again!";
+            }
+        }
+    </script>
+</body>
+</html>
+
